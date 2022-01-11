@@ -4,23 +4,23 @@ echo -e "Creating service..."
 curl --location -g -k --request POST 'https://localhost:8444/services' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-    "name": "hapi-fhir-api",
-    "url": "http://hapi-fhir-api:8080"
+    "name": "hapi-api",
+    "url": "http://hapi-fhir-api:8080/fhir"
   }'
 
 echo -e "\nCreating route..."
 curl --location -g -k --request POST 'https://localhost:8444/routes' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-    "name": "hapi-fhir-route",
+    "name": "hapi-api-route",
     "service": {
-      "name": "hapi-fhir-api"
+      "name": "hapi-api"
     },
-    "paths": ["/hapi-fhir"]
+    "paths": ["/hapi-api"]
   }'
 
 echo -e "\nEnabling plugin..."
-curl --location -g -k --request POST 'https://localhost:8444/services/hapi-fhir-api/plugins' \
+curl --location -g -k --request POST 'https://localhost:8444/services/hapi-api/plugins' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "name": "oauth2",
@@ -48,26 +48,26 @@ curl --location -g -k --request POST 'https://localhost:8444/consumers/NHS/oauth
   }'
 
 echo -e "\nCreating authorization code..."
-curl --location -g -k --request POST 'https://localhost:8443/hapi-fhir/oauth2/authorize' \
+curl --location -g -k --request POST 'https://localhost:8443/hapi-api/oauth2/authorize' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-    "client_id": "AfqYfTqR5ZCEf42CAP0zKEUZ0ne0i0QX",
+    "client_id": "XUPly2MPHh9VaRaany3LSoSbQoPNQ3xv",
     "response_type": "code",
     "scope": "patient",
-    "provision_key": "AT2Mhp22T7YKY1gNNsy2BJyFlQxJfoSg",
+    "provision_key": "IOUhcmHRfMYmUg2VWBJ9mQCoy6BOqjyM",
     "authenticated_userid": "parn"
   }'
 
 echo -e "\nCreating token..."
-curl --location -g -k --request POST 'https://localhost:8443/hapi-fhir/oauth2/token' \
+curl --location -g -k --request POST 'https://localhost:8443/hapi-api/oauth2/token' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "grant_type": "authorization_code",
-    "code": "wFpF4E0jo33MVXluMS9jh2NpeqeAA5al",
-    "client_id": "AfqYfTqR5ZCEf42CAP0zKEUZ0ne0i0QX",
-    "client_secret": "bqdHLT7puhXF7LiCkQaggJCS68y5xWX4"
+    "code": "vxq0lpMRwgKwEvdYkS0ah6326eCIvJzp",
+    "client_id": "XUPly2MPHh9VaRaany3LSoSbQoPNQ3xv",
+    "client_secret": "UvxNdGZKvvFy244J2kx2o7M3auQ038GR"
   }'
 
 echo -e "\n\nTesting..."
-curl --location -g -k --request GET 'https://localhost:8443/hapi-fhir' \
-  --header 'Authorization: Bearer tHgD8578vplBrAiyJ5mWmN2vIFQqCxjG'
+curl --location -g -k --request GET 'https://localhost:8443/hapi-api' \
+  --header 'Authorization: Bearer GS4rldBlqkGohMTD7gBeM8pbxHlyqB3j'

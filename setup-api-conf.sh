@@ -39,4 +39,4 @@ curl --location -g -k --request POST 'https://localhost:8444/consumers/parn/key-
 
 echo -e "\n\nTesting..."
 curl --location -g -k --request GET 'https://localhost:8443/api' \
-  --header 'apikey: ZxWZ8Tu01Nt51RFkx7RZeUO7rAuZS6Gt'
+  --header 'apikey: kvSpu2ZgOY1KRX78l6exlnzjGANpaoVX'
