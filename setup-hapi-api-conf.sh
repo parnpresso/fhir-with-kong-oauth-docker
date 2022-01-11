@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo -e "Creating service..."
 curl --location -g -k --request POST 'https://localhost:8444/services' \
   --header 'Content-Type: application/json' \
   --data-raw '{
@@ -7,7 +8,8 @@ curl --location -g -k --request POST 'https://localhost:8444/services' \
     "url": "http://hapi-fhir-api:8080"
   }'
 
-curl --location -g --request POST 'https://localhost:8444/routes' \
+echo -e "\nCreating route..."
+curl --location -g -k --request POST 'https://localhost:8444/routes' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "name": "hapi-fhir-route",
@@ -17,7 +19,8 @@ curl --location -g --request POST 'https://localhost:8444/routes' \
     "paths": ["/hapi-fhir"]
   }'
 
-curl --location -g --request POST 'https://localhost:8444/services/hapi-fhir-api/plugins' \
+echo -e "\nEnabling plugin..."
+curl --location -g -k --request POST 'https://localhost:8444/services/hapi-fhir-api/plugins' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "name": "oauth2",
@@ -29,34 +32,42 @@ curl --location -g --request POST 'https://localhost:8444/services/hapi-fhir-api
     "protocols": ["http", "https"]
   }'
 
-curl --location -g --request POST 'https://localhost:8444/consumers' \
+echo -e "\nCreating consumer..."
+curl --location -g -k --request POST 'https://localhost:8444/consumers' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-    "username": "HNS"
+    "username": "NHS"
   }'
 
-curl --location -g --request POST 'https://localhost:8444/consumers/a57bd817-e5c7-4ea8-ac86-775f7779b32f/oauth2' \
+echo -e "\nRegistering consumer to plugin..."
+curl --location -g -k --request POST 'https://localhost:8444/consumers/NHS/oauth2' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "name": "National Health Service of UK",
     "redirect_uris": ["http://nhs.co.uk/oauth-callback"]
   }'
 
-curl --location -g --request POST 'https://localhost:8443/hapi-fhir/oauth2/authorize' \
+echo -e "\nCreating authorization code..."
+curl --location -g -k --request POST 'https://localhost:8443/hapi-fhir/oauth2/authorize' \
   --header 'Content-Type: application/json' \
   --data-raw '{
-    "client_id": "E6T3vugp9jNPPuiLJNF4uzeA3wlgBn3W",
+    "client_id": "AfqYfTqR5ZCEf42CAP0zKEUZ0ne0i0QX",
     "response_type": "code",
     "scope": "patient",
-    "provision_key": "NDNPvpyWes5xo8Kg67X6y2tRcfQdo00A",
+    "provision_key": "AT2Mhp22T7YKY1gNNsy2BJyFlQxJfoSg",
     "authenticated_userid": "parn"
   }'
 
-curl --location -g --request POST 'https://localhost:8443/hapi-fhir/oauth2/token' \
+echo -e "\nCreating token..."
+curl --location -g -k --request POST 'https://localhost:8443/hapi-fhir/oauth2/token' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "grant_type": "authorization_code",
-    "code": "5OmROcyLLSyWcWtx2VK32LfR0OKy1VJl",
-    "client_id": "E6T3vugp9jNPPuiLJNF4uzeA3wlgBn3W",
-    "client_secret": "44lnf2S0ARQ5qkjcBtutSRfm0HbNYZ2F"
+    "code": "wFpF4E0jo33MVXluMS9jh2NpeqeAA5al",
+    "client_id": "AfqYfTqR5ZCEf42CAP0zKEUZ0ne0i0QX",
+    "client_secret": "bqdHLT7puhXF7LiCkQaggJCS68y5xWX4"
   }'
+
+echo -e "\n\nTesting..."
+curl --location -g -k --request GET 'https://localhost:8443/hapi-fhir' \
+  --header 'Authorization: Bearer tHgD8578vplBrAiyJ5mWmN2vIFQqCxjG'

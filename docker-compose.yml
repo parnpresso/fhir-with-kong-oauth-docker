@@ -40,8 +40,6 @@ services:
   hapi-fhir-api:
     image: hapiproject/hapi:latest
     container_name: hapi-fhir-api
-    ports:
-      - "8080:8080"
     networks:
       - kong-simple
 
